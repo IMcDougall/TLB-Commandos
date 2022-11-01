@@ -1,3 +1,4 @@
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
@@ -16,13 +17,11 @@ static inline unsigned read_counter() {
     __asm__ __volatile__ ("dmb sy");
     __asm__ __volatile__ ("mrs %0, cntvct_el0" : "=r"(tsc));
     __asm__ __volatile__ ("dmb sy");
-#elifdef __x86_64__
+#else
     unsigned a, d;
     asm volatile("lfence":::"memory");
     asm volatile("rdtsc" : "=a" (a), "=d" (d));
     tsc = ((unsigned long)a) | (((unsigned long)d) << 32);
-#else
-#error unknown architecture
 #endif
     return tsc;
 }
