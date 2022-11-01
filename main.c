@@ -41,19 +41,28 @@ int main(int argc, char** argv) {
 
     int num_pages = 2000000;
     int page_size = 4096;
+    int table_size = 1000;
+    int count = 1000000;
     int stride = 731734319;
 
     unsigned int next = 0;
 
     int c;
-    while ((c = getopt(argc, argv, "p:")) != -1) {
+    while ((c = getopt(argc, argv, "p:s:t:c:")) != -1) {
         switch (c) {
             case 'p':
                 num_pages = atoi(optarg);;
                 break;
             case 's':
-                num_pages = atoi(optarg);;
+                page_size = atoi(optarg);;
                 break;
+            case 't':
+                table_size = atoi(optarg);;
+                break;
+            case 'c':
+                count = atoi(optarg);;
+                break;
+
             default:
                 printf("Hello, World!\n");
                 printf("do I have github hooked up correctly?\n");
@@ -73,17 +82,17 @@ int main(int argc, char** argv) {
 
     printf("Allocated!\n");
 
-    int counts[1000];
-    for(int i=0; i<1000; i++) counts[i]=0;
+    int counts[table_size];
+    for(int i=0; i<table_size; i++) counts[i]=0;
 
-    for(int i=0; i<1000000; i++) {
+    for(int i=0; i<count; i++) {
         uint64_t time = access_memory(pages[next]);
-        if(time>=1000) time = 999;
+        if(time>=table_size) time = table_size-1;
         counts[time]++;
         next = (next + stride) % num_pages;
     }
 
-    for(int i=0; i<1000; i++) {
+    for(int i=0; i<table_size; i++) {
         if (counts[i] > 0) {
             printf("%d, %d\n", i, counts[i]);
         }
