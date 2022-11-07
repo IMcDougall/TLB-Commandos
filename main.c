@@ -2,50 +2,42 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
+#include <time.h>
+#include <sys/shm.h>
 
-
-
-static void initialize_counters() {
-//__asm__ __volatile__ ("mcr p15, 0, %0, c9, c12, 2" :: "r"(1<<31)); /* stop the cc */
-//__asm__ __volatile__ ("mcr p15, 0, %0, c9, c12, 0" :: "r"(5));     /* initialize */
-//__asm__ __volatile__ ("mcr p15, 0, %0, c9, c12, 1" :: "r"(1<<31)); /* start the cc */
-}
-
-static inline unsigned read_counter() {
-    uint64_t tsc;
-#ifdef __arm64
-    __asm__ __volatile__ ("dmb sy");
-    __asm__ __volatile__ ("mrs %0, cntvct_el0" : "=r"(tsc));
-    __asm__ __volatile__ ("dmb sy");
-#else
-    unsigned a, d;
-    asm volatile("lfence":::"memory");
-    asm volatile("rdtsc" : "=a" (a), "=d" (d));
-    tsc = ((unsigned long)a) | (((unsigned long)d) << 32);
-#endif
-    return tsc;
-}
-
+#include "utils.h"
 
 static int sum = 0;
 
-static inline int access_memory(char* ptr) {
-    unsigned long start = read_counter();
-    char value = *ptr;
-    unsigned long end = read_counter();
-    sum += value;
-    return end - start;
+static inline void access_memory(char* ptr) {
+    sum += *ptr;
 }
 
 int main(int argc, char** argv) {
 
-    int num_pages = 2000000;
+    int num_pages = 10000;
     int page_size = 4096;
     int table_size = 1000;
     int count = 1000000;
     int stride = 731734319;
 
     unsigned int next = 0;
+
+    int segment_id = shmget(IPC_PRIVATE, page_size, IPC_CREAT | 0600);
+    if (segment_id == -1) exit_with_error("shmget");
+
+    for(int i=2; i<6; i++) {
+        for(int j=0; j<32; j++) {
+            for(int k=0; k<512; k++) {
+                uint64_t addr = i;
+                addr = addr << 5 | j;
+                addr = addr << 9 | k;
+                addr = addr << 30;
+                void *p2 = shmat(segment_id, (void *) addr, SHM_RND);
+                if (p2 == NULL) exit_with_error("shm_attach");
+            }
+        }
+    }
 
     int c;
     while ((c = getopt(argc, argv, "p:s:t:c:")) != -1) {
@@ -78,25 +70,35 @@ int main(int argc, char** argv) {
         pages[i] = malloc(page_size);
     }
 
-    initialize_counters();
-
     printf("Allocated!\n");
 
-    int counts[table_size];
-    for(int i=0; i<table_size; i++) counts[i]=0;
+    struct timespec start;
+    struct timespec now;
+    uint64_t elapsed;
 
-    for(int i=0; i<count; i++) {
-        uint64_t time = access_memory(pages[next]);
-        if(time>=table_size) time = table_size-1;
-        counts[time]++;
-        next = (next + stride) % num_pages;
-    }
+    uint64_t accesses = 0;
 
-    for(int i=0; i<table_size; i++) {
-        if (counts[i] > 0) {
-            printf("%d, %d\n", i, counts[i]);
+    get_time(&start);
+    while(1) {
+        for (int i = 0; i < count; i++) {
+            access_memory(pages[next]);
+            accesses++;
+            next = (next + stride) % num_pages;
         }
+
+        get_time(&now);
+        elapsed = elapsed_nanos(&start, &now);
+        if (elapsed > 3L * ONE_BILLION) break;
+
     }
+
+    printf("accesses: %llu %llu\n", accesses, elapsed);
+
+    double perSecond = accesses;
+    perSecond = perSecond / elapsed;
+    perSecond *= ONE_BILLION;
+
+    printf("access per second:%f\n", perSecond);
 
     return 0;
 }
