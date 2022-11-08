@@ -28,18 +28,17 @@ void measure(int num_pages) {
     get_time(&start);
     while(1) {
         for (int i = 0; i < 10000; i++) {
-            uint64_t next = 0;
+            uint64_t hi = 64;
+            uint64_t lo = 0;;
             for(int j=0; j<num_pages; j++) {
-                uint64_t offset = next;
-                offset = offset << 30;
-                uint64_t addr = 0x200000000000L + offset;
-                //addr += 65536;
-
+                uint64_t addr = hi << 39 | lo < 30;
                 int *ptr = (int *) addr;
-                // printf("%llu %llu %p %llu\n", addr, offset, ptr, next);
                 sum = sum + *ptr;
                 accesses++;
-                next = (next + stride) % num_pages;
+                if (++hi < 192) continue;
+                hi = 64;
+                if (lo++ < 256) continue;
+                lo = 0;
             }
         }
 
@@ -78,6 +77,11 @@ int main(int argc, char** argv) {
                 if (p2 == NULL) exit_with_error("shm_attach");
             }
         }
+    }
+    measure(65535);
+
+    for (int i = 1; i < 65; i++) {
+        measure(i * 1000);
     }
 
     for (int i = 1; i < 2048; i++) {
