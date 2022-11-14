@@ -31,7 +31,7 @@ void measure(int num_pages) {
             uint64_t hi = 64;
             uint64_t lo = 0;;
             for(int j=0; j<num_pages; j++) {
-                uint64_t addr = hi << 39 | lo < 30;
+                uint64_t addr = hi << 39 | lo << 30;
                 int *ptr = (int *) addr;
                 sum = sum + *ptr;
                 accesses++;
@@ -53,13 +53,14 @@ void measure(int num_pages) {
     perSecond = perSecond / elapsed;
     perSecond *= ONE_BILLION;
 
-    printf("%d,%f\n", num_pages, perSecond);
+    printf("%d,%.0f  %d\n", num_pages, perSecond, sum);
 
 }
 
 int main(int argc, char** argv) {
 
     int num_pages = 10000;
+    if(argc > 1) num_pages = atoi(argv[1]);
     int page_size = 4096;
     int table_size = 1000;
     int count = 1000000;
@@ -74,17 +75,10 @@ int main(int argc, char** argv) {
                 addr = addr << 30;
 //                printf("%p\n", addr);
                 void *p2 = mmap(addr, 4096, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED | MAP_FIXED, -1, 0);
-                if (p2 == NULL) exit_with_error("shm_attach");
+                if (p2 == NULL) exit_with_error("mmap");
             }
         }
     }
-    measure(65535);
 
-    for (int i = 1; i < 65; i++) {
-        measure(i * 1000);
-    }
-
-    for (int i = 1; i < 2048; i++) {
-        measure(i);
-    }
+    measure(num_pages);
 }
