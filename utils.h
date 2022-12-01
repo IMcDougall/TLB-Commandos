@@ -3,7 +3,7 @@
 #ifndef TLB_UTILS_H
 #define TLB_UTILS_H
 
-#define ONE_BILLION (1000000000)
+#define ONE_BILLION (1000000000L)
 
 /**
  * print an error message and then exit the process.
