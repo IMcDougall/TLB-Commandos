@@ -15,7 +15,7 @@ static inline void access_memory(char* ptr) {
 }
 
 void measure(int num_pages) {
-    int stride = 113;
+    int stride = 346051; //prime
 
     struct timespec start;
     struct timespec now;
@@ -34,7 +34,7 @@ void measure(int num_pages) {
             page = (page + stride) % num_pages;
             uint64_t addr = base | page << 23;
 //            fprintf(stderr, "Addr: %p\n", (int*)addr);
-            sum = sum + ((int*)addr);
+            sum = sum + *((int*)addr);
             accesses++;
         }
 
@@ -65,8 +65,10 @@ int main(int argc, char** argv) {
     uint64_t addr = 2L << 44;
     for(int i=0 ; i<num_pages; i++) {
 //        printf("makeAddr: %p\n", (int*)addr);
-        void *p2 = mmap(addr, 4096, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED | MAP_FIXED, -1, 0);
+        void *p2 = mmap((void*) addr, 4096, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED | MAP_FIXED, -1, 0);
         if (p2 == NULL) exit_with_error("mmap");
+        if((uint64_t)p2 != addr) exit_with_error("address mismatch");
+        *((int*)addr) = i;
         addr += 1 << 23;
     }
 
