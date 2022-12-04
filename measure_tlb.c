@@ -77,5 +77,9 @@ int main(int argc, char** argv) {
         addr += 1 << 23;
     }
 
+    uint64_t  start_tlb = get_tlb_count();
     measure(num_pages);
+    uint64_t  end_tlb = get_tlb_count();
+    uint64_t diff = end_tlb - start_tlb;
+    printf("start: %lu end: %lu diff: %lu\n", start_tlb, end_tlb, diff);
 }

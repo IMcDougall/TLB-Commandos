@@ -27,4 +27,11 @@ void get_time(struct timespec* ts);
  */
 uint64_t elapsed_nanos(struct timespec* start, struct timespec* end);
 
+/**
+ * get the number of tlb misses that occurred
+ * @return tlb miss count
+ */
+unsigned long get_tlb_count(void);
+
+
 #endif //TLB_UTILS_H

@@ -39,3 +39,11 @@ uint64_t elapsed_nanos(struct timespec* start, struct timespec* end) {
     result += end->tv_nsec - start->tv_nsec;
     return result;
 }
+
+
+
+#define __NR_tlbcount 441
+unsigned long get_tlb_count(void)
+{
+    return syscall(__NR_tlbcount);
+}
