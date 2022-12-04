@@ -61,6 +61,11 @@ int main(int argc, char** argv) {
     int table_size = 1000;
     int count = 1000000;
 
+    void* heap = malloc(1);
+    if(heap == NULL) exit_with_error("malloc");
+    uint64_t heap_addr = (uint64_t) heap;
+    uint64_t stack_addr = (uint64_t) (&heap);
+    printf("heap_addr:%llu(%lx)  stack_addr:%llu(%lx)\n", heap_addr, heap_addr, stack_addr, stack_addr);
 
     uint64_t addr = 2L << 44;
     for(int i=0 ; i<num_pages; i++) {
