@@ -3,6 +3,7 @@
 #include <getopt.h>
 #include <time.h>
 #include <sys/shm.h>
+#include <sys/syscall.h>
 
 #include "utils.h"
 
