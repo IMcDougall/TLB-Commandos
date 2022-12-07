@@ -14,7 +14,7 @@ static inline void access_memory(char* ptr) {
     sum += *ptr;
 }
 
-void measure(int num_pages) {
+void measure(int num_pages, long sample_time) {
     int stride = 346051; //prime
 
     struct timespec start;
@@ -40,7 +40,7 @@ void measure(int num_pages) {
 
         get_time(&now);
         elapsed = elapsed_nanos(&start, &now);
-        if (elapsed > 2 * ONE_BILLION) break;
+        if (elapsed > sample_time * ONE_BILLION) break;
     }
 
  //   printf("accesses: %llu %llu %llu\n", accesses, elapsed, sum);
@@ -57,6 +57,9 @@ int main(int argc, char** argv) {
 
     int num_pages = 10000;
     if(argc > 1) num_pages = atoi(argv[1]);
+
+    int sample_time = 10;
+    if(argc > 2) sample_time = atoi(argv[2]);
     int page_size = 4096;
     int table_size = 1000;
     int count = 1000000;
@@ -78,7 +81,7 @@ int main(int argc, char** argv) {
     }
 
     uint64_t  start_tlb = get_tlb_count();
-    measure(num_pages);
+    measure(num_pages, sample_time);
     uint64_t  end_tlb = get_tlb_count();
     uint64_t diff = end_tlb - start_tlb;
     printf("start: %lu end: %lu diff: %lu\n", start_tlb, end_tlb, diff);
