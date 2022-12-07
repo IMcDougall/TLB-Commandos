@@ -55,6 +55,8 @@ void measure(int num_pages, long sample_time) {
 
 int main(int argc, char** argv) {
 
+    uint64_t  start_tlb = get_tlb_count();
+
     int num_pages = 10000;
     if(argc > 1) num_pages = atoi(argv[1]);
 
@@ -80,7 +82,6 @@ int main(int argc, char** argv) {
         addr += 1 << 23;
     }
 
-    uint64_t  start_tlb = get_tlb_count();
     measure(num_pages, sample_time);
     uint64_t  end_tlb = get_tlb_count();
     uint64_t diff = end_tlb - start_tlb;
