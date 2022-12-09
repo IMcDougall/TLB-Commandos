@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
         void *p2 = mmap((void*) addr, 4096, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED | MAP_FIXED, -1, 0);
         if (p2 == NULL) exit_with_error("mmap");
         if((uint64_t)p2 != addr) {
-            printf("i=%d\n", i);
+            printf("i=%d  addr:%016llx\n", i, p2);
             exit_with_error("address mismatch");
         }
         *((int*)addr) = i;
