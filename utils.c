@@ -41,7 +41,14 @@ uint64_t elapsed_nanos(struct timespec* start, struct timespec* end) {
     return result;
 }
 
-
+void print_heap_stack_address()
+{
+    void* heap = malloc(1);
+    if(heap == NULL) exit_with_error("malloc");
+    uint64_t heap_addr = (uint64_t) heap;
+    uint64_t stack_addr = (uint64_t) (&heap);
+    printf("heap_addr:%016llx  stack_addr:%016llx\n", heap_addr, stack_addr);
+}
 
 #define __NR_tlbcount 441
 unsigned long get_tlb_count(void)

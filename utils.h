@@ -33,5 +33,11 @@ uint64_t elapsed_nanos(struct timespec* start, struct timespec* end);
  */
 unsigned long get_tlb_count(void);
 
+/**
+ * prints the address of a pointer in the heap and the stack.
+ */
+void print_heap_stack_address();
+
+
 
 #endif //TLB_UTILS_H

@@ -81,6 +81,7 @@ void measure(int num_pages, int num_measurements, int sample_count) {
 int main(int argc, char** argv) {
 
     uint64_t  start_tlb = get_tlb_count();
+    print_heap_stack_address();
 
     int num_pages = 10000;
     if(argc > 1) num_pages = atoi(argv[1]);
@@ -96,11 +97,6 @@ int main(int argc, char** argv) {
     int table_size = 1000;
     int count = 1000000;
 
-    void* heap = malloc(1);
-    if(heap == NULL) exit_with_error("malloc");
-    uint64_t heap_addr = (uint64_t) heap;
-    uint64_t stack_addr = (uint64_t) (&heap);
-    printf("heap_addr:%llu(%lx)  stack_addr:%llu(%lx)\n", heap_addr, heap_addr, stack_addr, stack_addr);
 
     uint64_t addr = 2L << 44;
     for(int i=0 ; i<num_pages; i++) {
