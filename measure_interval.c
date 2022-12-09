@@ -102,7 +102,10 @@ int main(int argc, char** argv) {
     for(int i=0 ; i<num_pages; i++) {
         void *p2 = mmap((void*) addr, 4096, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED | MAP_FIXED, -1, 0);
         if (p2 == NULL) exit_with_error("mmap");
-        if((uint64_t)p2 != addr) exit_with_error("address mismatch");
+        if((uint64_t)p2 != addr) {
+            printf("i=%d\n", i);
+            exit_with_error("address mismatch");
+        }
         *((int*)addr) = i;
         addr += 1 << 23;
     }
