@@ -13,6 +13,8 @@ int is_verbose = 0;
 void measure(int num_pages, long sample_time) {
     int stride = find_next_prime((num_pages * 3) / 2);
 
+    srand(time(NULL));   // Initialization, should only be called once.
+
     struct timespec start;
     struct timespec now;
     uint64_t elapsed;
@@ -28,7 +30,7 @@ void measure(int num_pages, long sample_time) {
 
     while (1) {
         for (int i = 0; i < 1000000; i++) {
-            page = (page + stride) % num_pages;
+            page = rand() % num_pages;
             uint64_t addr = base | page << 23;
             sum = sum + *((int *) addr);
             accesses++;
