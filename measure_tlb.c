@@ -25,7 +25,8 @@ void measure(int num_pages, long sample_time) {
     int sum = 0; // don't optimize away our access.
 
     get_time(&start);
-    printf("numberOfPages, accesssesPerSecond")
+
+    if(!is_verbose) printf("# numberOfPages, accesssesPerSecond\n");
     while (1) {
         for (int i = 0; i < 1000000; i++) {
             page = (page + stride) % num_pages;
