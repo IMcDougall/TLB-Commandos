@@ -10,7 +10,7 @@
 
 int is_verbose = 0;
 
-void measure(int num_pages, long sample_time) {
+void measure(int num_pages, long sample_time, int method) {
     int stride = find_next_prime((num_pages * 3) / 2);
 
     srand(time(NULL));   // Initialization, should only be called once.
@@ -29,11 +29,34 @@ void measure(int num_pages, long sample_time) {
     get_time(&start);
 
     while (1) {
-        for (int i = 0; i < 1000000; i++) {
-            page = rand() % num_pages;
-            uint64_t addr = base | page << 23;
-            sum = sum + *((int *) addr);
-            accesses++;
+        switch(method) {
+            case 1:
+                for (int i = 0; i < 1000000; i++) {
+                    page = rand() % num_pages;
+                    uint64_t addr = base | page << 23;
+                    sum = sum + *((int *) addr);
+                    accesses++;
+                }
+                break;
+            case 2:
+                for (int i = 0; i < 1000000; i++) {
+                    if(page++ > num_pages) page = 0;
+                    uint64_t addr = base | page << 23;
+                    sum = sum + *((int *) addr);
+                    accesses++;
+                }
+                break;
+            case 3:
+                for (int i = 0; i < 1000000; i++) {
+                    page = (page + stride) % num_pages;
+                    uint64_t addr = base | page << 23;
+                    sum = sum + *((int *) addr);
+                    accesses++;
+                }
+                break;
+            default:
+                printf("unknown method:%d\n", method);
+                exit(1);
         }
 
         get_time(&now);
@@ -64,10 +87,11 @@ int main(int argc, char** argv) {
     int begin = 1;
     int end = 100;
     int increment = 2;
-    int runtime = 1;
+    int timeout = 1;
+    int method = 1;
 
     int c;
-    while ((c = getopt(argc, argv, "vp:b:e:i:r:")) != -1) {
+    while ((c = getopt(argc, argv, "vp:b:e:i:t:")) != -1) {
         switch (c) {
             case 'p':
                 num_pages = atoi(optarg);
@@ -81,8 +105,11 @@ int main(int argc, char** argv) {
             case 'i':
                 increment = atoi(optarg);
                 break;
-            case 'r':
-                runtime = atoi(optarg);
+            case 't':
+                timeout = atoi(optarg);
+                break;
+            case 'm':
+                method = atoi(optarg);
                 break;
             case 'v':
                 is_verbose = 1;
@@ -110,7 +137,7 @@ int main(int argc, char** argv) {
 
     if(!is_verbose) printf("# numberOfPages accessesPerSecond\n");
     for(int i=begin; i<end; i+=increment) {
-        measure(i, runtime);
+        measure(i, timeout, method);
     }
 
 
