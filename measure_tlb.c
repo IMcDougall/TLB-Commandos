@@ -4,7 +4,7 @@
 #include <getopt.h>
 #include <time.h>
 #include <sys/mman.h>
-#include <netdb.h>
+#include <unistd.h>
 
 #include "utils.h"
 
