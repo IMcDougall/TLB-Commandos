@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
     }
 
     char hostbuffer[256];
-    char* hostname = gethostname(hostbuffer, sizeof(hostbuffer));
+    int result = gethostname(hostbuffer, sizeof(hostbuffer));
 
     printf("%% pages: %d\n", num_pages);
     printf("%% begin: %d\n", begin);
@@ -128,7 +128,7 @@ int main(int argc, char** argv) {
     printf("%% increment: %d\n", increment);
     printf("%% timeout: %d\n", timeout);
     printf("%% method: %d\n", method);
-    printf("%% hostname: %s\n", hostname);
+    printf("%% hostname: %s\n", hostbuffer);
 
 
     uint64_t  start_tlb = get_tlb_count();
