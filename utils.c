@@ -41,8 +41,7 @@ uint64_t elapsed_nanos(struct timespec* start, struct timespec* end) {
     return result;
 }
 
-void print_heap_stack_address()
-{
+void print_heap_stack_address() {
     void* heap = malloc(1);
     if(heap == NULL) exit_with_error("malloc");
     uint64_t heap_addr = (uint64_t) heap;
@@ -54,4 +53,28 @@ void print_heap_stack_address()
 unsigned long get_tlb_count(void)
 {
     return syscall(__NR_tlbcount);
+}
+
+
+int is_prime(int n)
+{
+    if (n == 2 || n == 3)
+        return 1;
+
+    if (n <= 1 || n % 2 == 0 || n % 3 == 0)
+        return 0;
+
+    for (int i = 5; i * i <= n; i += 6)
+    {
+        if (n % i == 0 || n % (i + 2) == 0)
+            return 0;
+    }
+
+    return 1;
+}
+
+int find_next_prime(int n) {
+    while(1) {
+        if(is_prime(++n)) return n;
+    }
 }

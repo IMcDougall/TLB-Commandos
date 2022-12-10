@@ -11,14 +11,9 @@
 
 #include "utils.h"
 
-static int sum = 0;
-
-static inline void access_memory(char* ptr) {
-    sum += *ptr;
-}
 
 void measure(int buffer_size, u_int8_t* buffer) {
-    int stride = 731319;
+    int stride = find_next_prime((buffer_size * 5) / 7);
 
     struct timespec start;
     struct timespec now;
@@ -32,7 +27,7 @@ void measure(int buffer_size, u_int8_t* buffer) {
     while(1) {
         for (int i = 0; i < 1000000; i++) {
             sum += buffer[index];
-            index = (index + stride) & buffer_size;
+            index = (index + stride) % buffer_size;
             accesses++;
         }
 

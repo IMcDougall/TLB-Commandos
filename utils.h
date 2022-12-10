@@ -38,6 +38,10 @@ unsigned long get_tlb_count(void);
  */
 void print_heap_stack_address();
 
+/**
+ * find the next prime after n
+ */
+int find_next_prime(int n);
 
 
 #endif //TLB_UTILS_H
