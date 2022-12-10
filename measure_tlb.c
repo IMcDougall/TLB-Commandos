@@ -64,7 +64,7 @@ int main(int argc, char** argv) {
     int begin = 1;
     int end = 100;
     int increment = 2;
-    int runtime = 2;
+    int runtime = 1;
 
     int c;
     while ((c = getopt(argc, argv, "vp:b:e:i:r:")) != -1) {
@@ -110,7 +110,7 @@ int main(int argc, char** argv) {
 
     if(!is_verbose) printf("# numberOfPages accessesPerSecond\n");
     for(int i=begin; i<end; i+=increment) {
-        measure(i, 1);
+        measure(i, runtime);
     }
 
 
