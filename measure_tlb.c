@@ -46,7 +46,7 @@ void measure(int num_pages, long sample_time) {
         printf("num_pages:%d stride:%d accesses:%llu a/s:%.0f(%.2f) sum:%d\n", num_pages, stride, accesses, perSecond,
                perSecond / 1000000.0, sum);
     } else {
-        printf("%d, %llu", num_pages, perSecond);
+        printf("%d, %.2f\n", num_pages, perSecond/1000000.0);
     }
 }
 
@@ -102,7 +102,7 @@ int main(int argc, char** argv) {
         uint64_t  access = get_tlb_count();
         addr += 1 << 23;
 
-        if(is_verbose) printf("start:%d alloc:%d access:%d\n", start, alloc, access);
+        if(is_verbose) printf("page:%d start:%d alloc:%d access:%d\n", i, start, alloc, access);
     }
 
     for(int i=begin; i<end; i+=increment) {
