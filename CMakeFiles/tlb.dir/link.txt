@@ -1,0 +1,1 @@
+/usr/bin/cc      CMakeFiles/tlb.dir/main.o CMakeFiles/tlb.dir/utils.o  -o tlb -rdynamic 

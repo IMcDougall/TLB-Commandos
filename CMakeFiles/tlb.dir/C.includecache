@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ec2-user/TLB-Commandos/main.c
+stdint.h
+-
+stdio.h
+-
+stdlib.h
+-
+getopt.h
+-
+time.h
+-
+sys/shm.h
+-
+utils.h
+/home/ec2-user/TLB-Commandos/utils.h
+
+/home/ec2-user/TLB-Commandos/utils.c
+stdio.h
+-
+stdlib.h
+-
+getopt.h
+-
+time.h
+-
+sys/shm.h
+-
+sys/syscall.h
+-
+utils.h
+/home/ec2-user/TLB-Commandos/utils.h
+
+/home/ec2-user/TLB-Commandos/utils.h
+stdint.h
+-
+

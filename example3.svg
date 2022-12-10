@@ -1,0 +1,40 @@
+<!-- Include into html file with following line: -->
+<!-- <img width="216.00" height="172.80" src="example3"> -->
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="216.00" height="172.80">
+<defs>
+</defs>
+<path d="M 35.50,144.00 L 202.10,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 36.00,144.50 L 36.00,21.10 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 36.00,148.00 L 36.00,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 57.53,148.00 L 57.53,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 79.06,148.00 L 79.06,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 100.58,148.00 L 100.58,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 122.11,148.00 L 122.11,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 143.64,148.00 L 143.64,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 165.17,148.00 L 165.17,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 186.70,148.00 L 186.70,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 32.00,144.00 L 36.00,144.00 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 32.00,123.19 L 36.00,123.19 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 32.00,102.38 L 36.00,102.38 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 32.00,81.58 L 36.00,81.58 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 32.00,60.77 L 36.00,60.77 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<path d="M 32.00,39.96 L 36.00,39.96 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+<text x="36.00" y="151.00" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: hanging; "> 0</text>
+<text x="57.53" y="151.00" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: hanging; "> 13</text>
+<text x="79.06" y="151.00" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: hanging; "> 26</text>
+<text x="100.58" y="151.00" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: hanging; "> 39</text>
+<text x="122.11" y="151.00" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: hanging; "> 52</text>
+<text x="143.64" y="151.00" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: hanging; "> 65</text>
+<text x="165.17" y="151.00" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: hanging; "> 78</text>
+<text x="186.70" y="151.00" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: hanging; "> 91</text>
+<text x="29.00" y="144.00" style="font-family: default; font-size: 10; text-anchor: end; alignment-baseline: middle; "> 0</text>
+<text x="29.00" y="123.19" style="font-family: default; font-size: 10; text-anchor: end; alignment-baseline: middle; "> 17</text>
+<text x="29.00" y="102.38" style="font-family: default; font-size: 10; text-anchor: end; alignment-baseline: middle; "> 34</text>
+<text x="29.00" y="81.58" style="font-family: default; font-size: 10; text-anchor: end; alignment-baseline: middle; "> 51</text>
+<text x="29.00" y="60.77" style="font-family: default; font-size: 10; text-anchor: end; alignment-baseline: middle; "> 68</text>
+<text x="29.00" y="39.96" style="font-family: default; font-size: 10; text-anchor: end; alignment-baseline: middle; "> 85</text>
+<text x="118.80" y="14.10" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: baseline; "> A Sample Graph</text>
+<text x="118.80" y="164.00" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: hanging; "> The X-Axis</text>
+<text x="14.88" y="82.80" transform="rotate(-90.00 14.88,82.80)" style="font-family: default; font-size: 10; text-anchor: middle; alignment-baseline: baseline; "> The Y-Axis</text>
+<path d="M 37.66,25.86 L 39.31,25.85 L 40.97,25.84 L 42.62,25.79 L 44.28,25.90 L 45.94,25.92 L 47.59,25.95 L 49.25,25.99 L 50.90,25.95 L 52.56,26.04 L 54.22,26.15 L 55.87,26.29 L 57.53,26.40 L 59.18,26.48 L 60.84,26.61 L 62.50,26.69 L 64.15,26.74 L 65.81,26.78 L 67.46,26.83 L 69.12,26.89 L 70.78,26.90 L 72.43,26.97 L 74.09,27.00 L 75.74,27.00 L 77.40,27.62 L 79.06,27.05 L 80.71,27.07 L 82.37,27.10 L 84.02,27.12 L 85.68,27.14 L 87.34,27.18 L 88.99,27.18 L 90.65,27.21 L 92.30,27.22 L 93.96,27.25 L 95.62,27.28 L 97.27,27.28 L 98.93,27.30 L 100.58,27.32 L 102.24,27.33 L 103.90,27.34 L 105.55,27.34 L 107.21,27.35 L 108.86,27.37 L 110.52,27.38 L 112.18,27.38 L 113.83,27.41 L 115.49,27.40 L 117.14,27.43 L 118.80,27.41 L 120.46,27.41 L 122.11,27.44 L 123.77,27.41 L 125.42,27.41 L 127.08,27.41 L 128.74,27.44 L 130.39,27.52 L 132.05,27.46 L 133.70,27.82 L 135.36,27.45 L 137.02,27.46 L 138.67,27.49 L 140.33,27.50 L 141.98,27.49 L 143.64,27.52 L 145.30,27.50 L 146.95,27.52 L 148.61,27.54 L 150.26,27.52 L 151.92,27.52 L 153.58,27.52 L 155.23,27.59 L 156.89,27.54 L 158.54,27.54 L 160.20,27.54 L 161.86,27.54 L 163.51,27.59 L 165.17,27.54 L 166.82,27.56 L 168.48,27.57 L 170.14,27.56 L 171.79,27.56 L 173.45,27.55 L 175.10,27.57 L 176.76,27.59 L 178.42,27.56 L 180.07,27.57 L 181.73,27.55 L 183.38,27.57 L 185.04,27.60 L 186.70,27.61 L 188.35,27.62 L 190.01,27.66 L 191.66,27.63 L 193.32,27.63 L 194.98,27.65 L 196.63,29.29 L 198.29,30.69 L 199.94,32.07 " style="stroke: #000000; stroke-width: 1.00; fill: none;"/>
+</svg>
