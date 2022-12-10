@@ -8,6 +8,8 @@
 
 #include "utils.h"
 
+int is_verbose = 0;
+
 void measure(int num_pages, long sample_time) {
     int stride = find_next_prime((num_pages * 3) / 2);
 
@@ -23,11 +25,11 @@ void measure(int num_pages, long sample_time) {
     int sum = 0; // don't optimize away our access.
 
     get_time(&start);
-    while(1) {
+    while (1) {
         for (int i = 0; i < 1000000; i++) {
             page = (page + stride) % num_pages;
             uint64_t addr = base | page << 23;
-            sum = sum + *((int*)addr);
+            sum = sum + *((int *) addr);
             accesses++;
         }
 
@@ -36,29 +38,59 @@ void measure(int num_pages, long sample_time) {
         if (elapsed > sample_time * ONE_BILLION) break;
     }
 
- //   printf("accesses: %llu %llu %llu\n", accesses, elapsed, sum);
-
     double perSecond = accesses;
     perSecond = perSecond / elapsed;
     perSecond *= ONE_BILLION;
 
-    printf("num_pages:%d stride:%d accesses:%llu a/s:%.0f(%.2f) sum:%d\n", num_pages, stride, accesses, perSecond, perSecond/1000000.0, sum);
+    if (is_verbose) {
+        printf("num_pages:%d stride:%d accesses:%llu a/s:%.0f(%.2f) sum:%d\n", num_pages, stride, accesses, perSecond,
+               perSecond / 1000000.0, sum);
+    } else {
+        printf("%d, %llu", num_pages, perSecond);
+    }
+}
 
+void usage() {
+    printf("should add usage here\n");
+    exit(1);
 }
 
 int main(int argc, char** argv) {
 
-    uint64_t  start_tlb = get_tlb_count();
-    print_heap_stack_address();
-
     int num_pages = 10000;
-    if(argc > 1) num_pages = atoi(argv[1]);
+    int begin = 1;
+    int end = 100;
+    int increment = 2;
+    int runtime = 2;
 
-    int sample_time = 10;
-    if(argc > 2) sample_time = atoi(argv[2]);
-    int page_size = 4096;
-    int table_size = 1000;
-    int count = 1000000;
+    int c;
+    while ((c = getopt(argc, argv, "vp:b:e:i:r:")) != -1) {
+        switch (c) {
+            case 'p':
+                num_pages = 1;
+                break;
+            case 'b':
+                begin = 1;
+                break;
+            case 'e':
+                end = 1;
+                break;
+            case 'i':
+                increment = 1;
+                break;
+            case 'n':
+                runtime = 0;
+                break;
+            case 'v':
+                is_verbose = 1;
+                break;
+             default:
+                usage();
+        }
+    }
+
+    uint64_t  start_tlb = get_tlb_count();
+    if(is_verbose) print_heap_stack_address();
 
     uint64_t addr = 2L << 44;
     for(int i=0 ; i<num_pages; i++) {
@@ -70,15 +102,15 @@ int main(int argc, char** argv) {
         uint64_t  access = get_tlb_count();
         addr += 1 << 23;
 
-        printf("start:%d alloc:%d access:%d\n", start, alloc, access);
+        if(is_verbose) printf("start:%d alloc:%d access:%d\n", start, alloc, access);
     }
 
-    for(int i=180; i<2560; i+=10) {
+    for(int i=begin; i<end; i+=increment) {
         measure(i, 1);
     }
 
 
     uint64_t  end_tlb = get_tlb_count();
     uint64_t diff = end_tlb - start_tlb;
-    printf("start: %lu end: %lu diff: %lu\n", start_tlb, end_tlb, diff);
+    if(is_verbose) printf("start: %lu end: %lu diff: %lu\n", start_tlb, end_tlb, diff);
 }
