@@ -5,6 +5,7 @@
 #include <time.h>
 #include <sys/mman.h>
 #include <unistd.h>
+#include <sys/fcntl.h>
 
 #include "utils.h"
 
@@ -124,7 +125,7 @@ int main(int argc, char** argv) {
 
     printf("%% hostname: %s\n", hostbuffer);
 
-    int fd = fopen("instance-type", "r");
+    int fd = open("instance-type", "r");
     if(fd<0) {
         printf("instance-type file is missing");
         exit(1);
