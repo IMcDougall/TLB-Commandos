@@ -122,13 +122,26 @@ int main(int argc, char** argv) {
     char hostbuffer[256];
     int result = gethostname(hostbuffer, sizeof(hostbuffer));
 
+    printf("%% hostname: %s\n", hostbuffer);
+
+    int fd = fopen("instance-type", "r");
+    if(fd<0) {
+        printf("instance-type file is missing");
+        exit(1);
+    }
+    char buffer[256];
+    read(fd, buffer, sizeof(buffer));
+    close(fd);
+    printf("%% instance-type: %s\n", buffer);
+
+
     printf("%% pages: %d\n", num_pages);
     printf("%% begin: %d\n", begin);
     printf("%% end: %d\n", end);
     printf("%% increment: %d\n", increment);
     printf("%% timeout: %d\n", timeout);
     printf("%% method: %d\n", method);
-    printf("%% hostname: %s\n", hostbuffer);
+
 
 
     uint64_t  start_tlb = get_tlb_count();
