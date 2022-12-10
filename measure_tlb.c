@@ -67,19 +67,19 @@ int main(int argc, char** argv) {
     while ((c = getopt(argc, argv, "vp:b:e:i:r:")) != -1) {
         switch (c) {
             case 'p':
-                num_pages = 1;
+                num_pages = atoi(optarg);
                 break;
             case 'b':
-                begin = 1;
+                begin = atoi(optarg);
                 break;
             case 'e':
-                end = 1;
+                end = atoi(optarg);
                 break;
             case 'i':
-                increment = 1;
+                increment = atoi(optarg);
                 break;
-            case 'n':
-                runtime = 0;
+            case 'r':
+                runtime = atoi(optarg);
                 break;
             case 'v':
                 is_verbose = 1;
