@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <time.h>
-#include <sys/shm.h>
 #include <sys/mman.h>
+#include <netdb.h>
 
 #include "utils.h"
 
@@ -86,9 +86,9 @@ int main(int argc, char** argv) {
     int num_pages = 10000;
     int begin = 1;
     int end = 100;
-    int increment = 2;
+    int increment = 1;
     int timeout = 1;
-    int method = 1;
+    int method = 2;
 
     int c;
     while ((c = getopt(argc, argv, "vp:b:e:i:t:m:")) != -1) {
@@ -118,6 +118,18 @@ int main(int argc, char** argv) {
                 usage();
         }
     }
+
+    char hostbuffer[256];
+    char* hostname = gethostname(hostbuffer, sizeof(hostbuffer));
+
+    printf("%% pages: %d\n", num_pages);
+    printf("%% begin: %d\n", begin);
+    printf("%% end: %d\n", end);
+    printf("%% increment: %d\n", increment);
+    printf("%% timeout: %d\n", timeout);
+    printf("%% method: %d\n", method);
+    printf("%% hostname: %s\n", hostname);
+
 
     uint64_t  start_tlb = get_tlb_count();
     if(is_verbose) print_heap_stack_address();
