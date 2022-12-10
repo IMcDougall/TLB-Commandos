@@ -91,7 +91,7 @@ int main(int argc, char** argv) {
     int method = 1;
 
     int c;
-    while ((c = getopt(argc, argv, "vp:b:e:i:t:")) != -1) {
+    while ((c = getopt(argc, argv, "vp:b:e:i:t:m:")) != -1) {
         switch (c) {
             case 'p':
                 num_pages = atoi(optarg);
