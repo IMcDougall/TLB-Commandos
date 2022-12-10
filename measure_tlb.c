@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
         if(is_verbose) printf("page:%d start:%d alloc:%d access:%d\n", i, start, alloc, access);
     }
 
-    if(!is_verbose) printf("# numberOfPages accesssesPerSecond\n");
+    if(!is_verbose) printf("# numberOfPages accessesPerSecond\n");
     for(int i=begin; i<end; i+=increment) {
         measure(i, 1);
     }
