@@ -72,14 +72,14 @@ void measure(int num_pages, int num_measurements, int sample_count) {
 
 
     qsort(measurements, num_measurements, sizeof(uint64_t), cmpfunc);
-    print_percentile(num_measurements, measurements, 0.0);
-    print_percentile(num_measurements, measurements, 10.0);
-    print_percentile(num_measurements, measurements, 50.0);
-    print_percentile(num_measurements, measurements, 90.0);
-    print_percentile(num_measurements, measurements, 99.0);
-    print_percentile(num_measurements, measurements, 99.9);
-    print_percentile(num_measurements, measurements, 99.99);
-    print_percentile(num_measurements, measurements, 100);
+//    print_percentile(num_measurements, measurements, 0.0);
+//    print_percentile(num_measurements, measurements, 10.0);
+//    print_percentile(num_measurements, measurements, 50.0);
+//    print_percentile(num_measurements, measurements, 90.0);
+//    print_percentile(num_measurements, measurements, 99.0);
+//    print_percentile(num_measurements, measurements, 99.9);
+//    print_percentile(num_measurements, measurements, 99.99);
+//    print_percentile(num_measurements, measurements, 100);
 
     double total = 0.0;
     for (int i = 0; i < num_measurements; i++) total += measurements[i];
@@ -179,6 +179,7 @@ int main(int argc, char** argv) {
         addr += 1 << 23;
     }
 
+    printf("# pages p0 p10 p50 p90 p99 p99.9 p99.99 p100 average variance\n");
 
     for(int i=begin; i<end; i+=increment) {
         measure(i, samples, count);
