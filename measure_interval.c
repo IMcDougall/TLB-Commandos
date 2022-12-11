@@ -91,7 +91,7 @@ void measure(int num_pages, int num_measurements, int sample_count) {
         error_squared += delta * delta;
     }
     double variance = error_squared / (num_measurements - 1);
-    double stddev = sqrt(variance);
+//    double stddev = sqrt(variance);
 
     printf("%d %llu %llu %llu %llu %llu %llu %llu %llu %.2f %.2f \n", num_pages,
            get_percentile(num_measurements, measurements, 0.0),
@@ -102,7 +102,7 @@ void measure(int num_pages, int num_measurements, int sample_count) {
            get_percentile(num_measurements, measurements, 99.9),
            get_percentile(num_measurements, measurements, 99.99),
            get_percentile(num_measurements, measurements, 100),
-           average, stddev);
+           average, variance);
 }
 
 
