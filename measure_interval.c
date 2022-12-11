@@ -3,9 +3,12 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <time.h>
-#include <sys/shm.h>
 #include <sys/mman.h>
-#include <math.h>
+#include <unistd.h>
+#include <sys/fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 
 #include "utils.h"
 
