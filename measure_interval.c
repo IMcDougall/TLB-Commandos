@@ -32,12 +32,14 @@ void print_percentile(int num_measurements, uint64_t* measurements, float percen
     printf("%f (%d of %d) %llu\n", percentile, index, num_measurements, measurements[index]);
 }
 
-uint64_t get_percentile(int num_measurements, uint64_t* measurements, float percentile) {
+double get_percentile(int num_measurements, uint64_t* measurements, int sample_count, float percentile) {
     float findex = percentile * num_measurements / 100.0;
     int index = (int) findex;
     if(index>=num_measurements) index = num_measurements-1;
 
-    return measurements[index];
+    double result = measurements[index];
+    result = result / (double) sample_count;
+    return result;
 }
 
 
@@ -93,15 +95,15 @@ void measure(int num_pages, int num_measurements, int sample_count) {
     double variance = error_squared / (num_measurements - 1);
 //    double stddev = sqrt(variance);
 
-    printf("%d %llu %llu %llu %llu %llu %llu %llu %llu %.2f %.2f \n", num_pages,
-           get_percentile(num_measurements, measurements, 0.0),
-           get_percentile(num_measurements, measurements, 10.0),
-           get_percentile(num_measurements, measurements, 50.0),
-           get_percentile(num_measurements, measurements, 90.0),
-           get_percentile(num_measurements, measurements, 99.0),
-           get_percentile(num_measurements, measurements, 99.9),
-           get_percentile(num_measurements, measurements, 99.99),
-           get_percentile(num_measurements, measurements, 100),
+    printf("%d %.2f %.2f %.2f %.2f %.2f %.2f%.2f %.2f %.2f %.2f \n", num_pages,
+           get_percentile(num_measurements, measurements, sample_count, 0.0),
+           get_percentile(num_measurements, measurements, sample_count, 10.0),
+           get_percentile(num_measurements, measurements, sample_count, 50.0),
+           get_percentile(num_measurements, measurements, sample_count, 90.0),
+           get_percentile(num_measurements, measurements, sample_count, 99.0),
+           get_percentile(num_measurements, measurements, sample_count, 99.9),
+           get_percentile(num_measurements, measurements, sample_count, 99.99),
+           get_percentile(num_measurements, measurements, sample_count, 100),
            average, variance);
 }
 
