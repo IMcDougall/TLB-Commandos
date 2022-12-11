@@ -5,6 +5,7 @@
 #include <time.h>
 #include <sys/shm.h>
 #include <sys/mman.h>
+#include <math.h>
 
 #include "utils.h"
 
@@ -24,12 +25,20 @@ void print_percentile(int num_measurements, uint64_t* measurements, float percen
     int index = (int) findex;
     if(index>=num_measurements) index = num_measurements-1;
 
-    printf("%f (%d of %d) %lu\n", percentile, index, num_measurements, measurements[index]);
+    printf("%f (%d of %d) %llu\n", percentile, index, num_measurements, measurements[index]);
+}
+
+uint64_t get_percentile(int num_measurements, uint64_t* measurements, float percentile) {
+    float findex = percentile * num_measurements / 100.0;
+    int index = (int) findex;
+    if(index>=num_measurements) index = num_measurements-1;
+
+    return measurements[index];
 }
 
 
 void measure(int num_pages, int num_measurements, int sample_count) {
-    int stride = 346051; //prime
+    int stride = find_next_prime((num_pages * 3) / 2);
 
     struct timespec start;
     struct timespec now;
@@ -45,12 +54,12 @@ void measure(int num_pages, int num_measurements, int sample_count) {
     uint64_t measurements[num_measurements];
 
     get_time(&start);
-    for(int j=0; j<num_measurements; j++) {
+    for (int j = 0; j < num_measurements; j++) {
         get_time(&start);
         for (int i = 0; i < sample_count; i++) {
             page = (page + stride) % num_pages;
             uint64_t addr = base | page << 23;
-            sum = sum + *((int*)addr);
+            sum = sum + *((int *) addr);
             accesses++;
         }
         get_time(&now);
@@ -68,50 +77,106 @@ void measure(int num_pages, int num_measurements, int sample_count) {
     print_percentile(num_measurements, measurements, 99.99);
     print_percentile(num_measurements, measurements, 100);
 
-    //   printf("accesses: %llu %llu %llu\n", accesses, elapsed, sum);
+    double total = 0.0;
+    for (int i = 0; i < num_measurements; i++) total += measurements[i];
+    double average = total / (double) num_measurements;
 
-    double perSecond = accesses;
-    perSecond = perSecond / elapsed;
-    perSecond *= ONE_BILLION;
+    double error_squared = 0.0;
+    for (int i = 0; i < num_measurements; i++) {
+        double delta = average - (double) num_measurements;
+        error_squared += delta * delta;
+    }
+    double variance = error_squared / (num_measurements - 1);
+    double stddev = sqrt(variance);
 
-    printf("num_pages:%d accesses:%llu a/s:%.0f sum:%d\n", num_pages, accesses, perSecond, sum);
-
+    printf("%d %llu %llu %llu %llu %llu %llu %llu %llu %.2f %.2f \n", num_pages,
+           get_percentile(num_measurements, measurements, 0.0),
+           get_percentile(num_measurements, measurements, 10.0),
+           get_percentile(num_measurements, measurements, 50.0),
+           get_percentile(num_measurements, measurements, 90.0),
+           get_percentile(num_measurements, measurements, 99.0),
+           get_percentile(num_measurements, measurements, 99.9),
+           get_percentile(num_measurements, measurements, 99.99),
+           get_percentile(num_measurements, measurements, 100),
+           average, stddev);
 }
 
+
+void usage() {
+    printf("should add usage here\n");
+    exit(1);
+}
+
+
 int main(int argc, char** argv) {
+
+    int num_pages = 10000;
+    int begin = 1;
+    int end = 100;
+    int increment = 1;
+    int samples = 100000;
+    int method = 2;
+    int count = 1000;
+
+    int c;
+    while ((c = getopt(argc, argv, "vp:b:e:i:s:m:c:")) != -1) {
+        switch (c) {
+            case 'p':
+                num_pages = atoi(optarg);
+                break;
+            case 'b':
+                begin = atoi(optarg);
+                break;
+            case 'e':
+                end = atoi(optarg);
+                break;
+            case 'i':
+                increment = atoi(optarg);
+                break;
+            case 's':
+                samples = atoi(optarg);
+                break;
+            case 'c':
+                count = atoi(optarg);
+                break;
+            case 'm':
+                method = atoi(optarg);
+                break;
+             default:
+                usage();
+        }
+    }
+
+    char hostbuffer[256];
+    int result = gethostname(hostbuffer, sizeof(hostbuffer));
+
+    printf("%% hostname: %s\n", hostbuffer);
+
+    printf("%% pages: %d\n", num_pages);
+    printf("%% begin: %d\n", begin);
+    printf("%% end: %d\n", end);
+    printf("%% increment: %d\n", increment);
+    printf("%% samples: %d\n", samples);
+    printf("%% count: %d\n", count);
+    printf("%% method: %d\n", method);
+
 
     uint64_t  start_tlb = get_tlb_count();
     print_heap_stack_address();
 
-    int num_pages = 10000;
-    if(argc > 1) num_pages = atoi(argv[1]);
-
-    int num_measurements = 10000;
-    if(argc > 2) num_measurements = atoi(argv[2]);
-
-    int sample_size = 1000;
-    if(argc > 2) sample_size = atoi(argv[3]);
-
-
-    int page_size = 4096;
-    int table_size = 1000;
-    int count = 1000000;
-
-
     uint64_t addr = 2L << 44;
     for(int i=0 ; i<num_pages; i++) {
+        uint64_t  start = get_tlb_count();
         void *p2 = mmap((void*) addr, 4096, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED | MAP_FIXED, -1, 0);
-        if (p2 == NULL) exit_with_error("mmap");
-        if((uint64_t)p2 != addr) {
-            printf("i=%d\n", i);
-            exit_with_error("address mismatch");
-        }
-        *((int*)addr) = i;
+        uint64_t  alloc = get_tlb_count();
+        if ((int64_t)p2 == -1L) exit_with_error("mmap");
+        *((int*)addr) = i; // put a value into the allocated buffer
+        uint64_t  access = get_tlb_count();
         addr += 1 << 23;
     }
 
-    measure(num_pages, num_measurements, sample_size);
-    uint64_t  end_tlb = get_tlb_count();
-    uint64_t diff = end_tlb - start_tlb;
-    printf("start: %lu end: %lu diff: %lu\n", start_tlb, end_tlb, diff);
+
+    for(int i=begin; i<end; i+=increment) {
+        measure(i, samples, count);
+    }
 }

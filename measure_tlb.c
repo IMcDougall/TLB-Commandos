@@ -15,7 +15,7 @@
 int is_verbose = 0;
 
 void measure(int num_pages, long sample_time, int method) {
-    int stride = find_next_prime((num_pages * 3) / 2);
+    int stride = find_next_prime((num_pages * 2) / 3);
 
     srand(time(NULL));   // Initialization, should only be called once.
 
@@ -52,7 +52,9 @@ void measure(int num_pages, long sample_time, int method) {
                 break;
             case 3:
                 for (int i = 0; i < 1000000; i++) {
-                    page = (page + stride) % num_pages;
+                    page += stride;
+                    while(page >= num_pages) page -= num_pages;
+
                     uint64_t addr = base | page << 23;
                     sum = sum + *((int *) addr);
                     accesses++;
@@ -156,12 +158,10 @@ int main(int argc, char** argv) {
         uint64_t  start = get_tlb_count();
         void *p2 = mmap((void*) addr, 4096, PROT_READ | PROT_WRITE, MAP_ANON | MAP_SHARED | MAP_FIXED, -1, 0);
         uint64_t  alloc = get_tlb_count();
-        if (p2 == -1) exit_with_error("mmap");
+        if ((int64_t)p2 == -1L) exit_with_error("mmap");
         *((int*)addr) = i; // put a value into the allocated buffer
         uint64_t  access = get_tlb_count();
         addr += 1 << 23;
-
-        if(is_verbose) printf("page:%d start:%d alloc:%d access:%d\n", i, start, alloc, access);
     }
 
     if(!is_verbose) printf("# numberOfPages accessesPerSecond\n");
@@ -172,5 +172,5 @@ int main(int argc, char** argv) {
 
     uint64_t  end_tlb = get_tlb_count();
     uint64_t diff = end_tlb - start_tlb;
-    if(is_verbose) printf("start: %lu end: %lu diff: %lu\n", start_tlb, end_tlb, diff);
+    if(is_verbose) printf("start: %llu end: %llu diff: %llu\n", start_tlb, end_tlb, diff);
 }
