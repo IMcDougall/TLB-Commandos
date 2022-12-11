@@ -166,10 +166,6 @@ int main(int argc, char** argv) {
     printf("%% count: %d\n", count);
     printf("%% method: %d\n", method);
 
-
-    uint64_t  start_tlb = get_tlb_count();
-    print_heap_stack_address();
-
     uint64_t addr = 2L << 44;
     for(int i=0 ; i<num_pages; i++) {
         uint64_t  start = get_tlb_count();
