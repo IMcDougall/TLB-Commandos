@@ -85,11 +85,11 @@ void measure(int num_pages, int num_measurements, int sample_count) {
 
     double total = 0.0;
     for (int i = 0; i < num_measurements; i++) total += measurements[i];
-    double average = total / (double) num_measurements;
+    double average = total / (double) num_measurements / (double) sample_count;
 
     double error_squared = 0.0;
     for (int i = 0; i < num_measurements; i++) {
-        double delta = average - (double) num_measurements;
+        double delta = average - ((double) measurements[i] / (double) sample_count);
         error_squared += delta * delta;
     }
     double variance = error_squared / (num_measurements - 1);
