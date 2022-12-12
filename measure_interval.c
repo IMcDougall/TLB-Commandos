@@ -63,7 +63,7 @@ void measure(int num_pages, int num_measurements, int sample_count) {
     for (int j = 0; j < num_measurements; j++) {
         get_time(&start);
         for (int i = 0; i < sample_count; i++) {
-            page = (page + stride) % num_pages;
+            if(page++ > num_pages) page = 0;
             uint64_t addr = base | page << 23;
             sum = sum + *((int *) addr);
             accesses++;
